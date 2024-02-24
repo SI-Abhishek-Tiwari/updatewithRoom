@@ -11,9 +11,16 @@
         <action
             android:id="@+id/action_listFragment_to_editFragment"
             app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_addFragment"
+            app:destination="@id/addFragment" />
     </fragment>
     <fragment
         android:id="@+id/editFragment"
         android:name="com.packagename.updatewithroom.EditFragment"
         android:label="EditFragment" />
+    <fragment
+        android:id="@+id/addFragment"
+        android:name="com.packagename.updatewithroom.AddFragment"
+        android:label="AddFragment" />
 </navigation>

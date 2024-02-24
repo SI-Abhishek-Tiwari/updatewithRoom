@@ -3,6 +3,9 @@ package com.packagename.updatewithroom
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -37,8 +40,11 @@ class ListFragment: Fragment() {
     ): View? {
         _binding = ListFragmentBinding.inflate(inflater,container,false)
 
+
         return binding.root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,6 +53,12 @@ class ListFragment: Fragment() {
 
         database = EmployeeDatabase.getDatabase(requireActivity())
 
+        binding.btnAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_listFragment_to_addFragment)
+        }
+
+
+
 
 
         lifecycleScope.launch{
@@ -54,16 +66,18 @@ class ListFragment: Fragment() {
                 val response = RetrofitInstance.api.getEmployee()
                 Log.d("response", response.toString())
 
-                //        database.employeeDao().updateEmployee(Employee(23,"Abhi",50000000,1,""))
-                //       database.employeeDao().insertEmployee(Employee(22,"Ravi",5000000,25,""))
-                database.employeeDao().deleteEmployee(Employee(22,"Ravi",5000000,25,""))
+//                        database.employeeDao().updateEmployee(Employee(23,"Abhi",50000000,1,""))
+                      database.employeeDao().insertEmployee(Employee(24,"Ravi",5000000,20,""))
+              //  database.employeeDao().deleteEmployee(Employee(22,"Ravi",5000000,25,""))
+
 
                 withContext(Dispatchers.Main){
                     if (response.isSuccessful && response != null){
                         val list = response.body()?.data ?: listOf()
                         for (items in list){
                             val employee = Employee(items.employeeAge,items.employeeName,items.employeeSalary,items.id,items.profileImage)
-                            database.employeeDao().insertEmployee(employee)
+                          database.employeeDao().insertEmployee(employee)
+                    //        database.employeeDao().updateEmployee(employee)
                         }
 
 
@@ -89,7 +103,7 @@ class ListFragment: Fragment() {
         database.employeeDao().getEmployee().observe(requireActivity(), Observer {
             if (it != null){
 
-                recyclerview.adapter = DemoAdapter(it,::onListClicked)
+                recyclerview.adapter = DemoAdapter(requireActivity(),it,::onListClicked,::onItemClicked)
 
             }
         })
@@ -101,6 +115,13 @@ class ListFragment: Fragment() {
         bundle.putString("EmployeeList",Gson().toJson(employee))
         findNavController().navigate(R.id.action_listFragment_to_editFragment,bundle)
     }
+
+    private fun onItemClicked(employee: Employee){
+        lifecycleScope.launch {
+            database.employeeDao().deleteEmployee(employee)
+        }
+    }
+
 
 
 }

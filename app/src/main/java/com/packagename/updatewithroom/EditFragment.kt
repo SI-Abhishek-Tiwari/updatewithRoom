@@ -1,6 +1,7 @@
 package com.packagename.updatewithroom
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,10 @@ class EditFragment: Fragment() {
     private fun userInput(){
         binding.btnSubmit.setOnClickListener {
             lifecycleScope.launch {
-                database.employeeDao().insertEmployee(Employee(binding.edtId.text.toString().toInt(),binding.edtName.text.toString(),binding.edtSalary.text.toString().toInt(),binding.edtId.text.toString().toInt(),""))
+              //  database.employeeDao().insertEmployee(Employee(binding.edtId.text.toString().toInt(),binding.edtName.text.toString(),binding.edtSalary.text.toString().toInt(),binding.edtAge.text.toString().toInt(),""))
+              //  database.employeeDao().updateEmployee(Employee(binding.edtId.text.toString().toInt(),binding.edtName.text.toString(),binding.edtSalary.text.toString().toInt(),binding.edtAge.text.toString().toInt(),""))
+                database.employeeDao().updateEmployee(Employee(binding.edtAge.text.toString().toInt(),binding.edtName.text.toString(),binding.edtSalary.text.toString().toInt(),binding.edtId.text.toString().toInt(),""))
+            //    Log.d("age",binding.edtAge.text.toString().toInt().toString() )
 
             }
 
